@@ -1,3 +1,4 @@
 rootProject.name = "MCSkinLookup"
 
-include("cmd")
+if(System.getenv("JITPACK") != "true")
+    include("cmd")

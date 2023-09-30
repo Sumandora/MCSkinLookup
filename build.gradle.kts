@@ -38,3 +38,28 @@ java {
 kotlin {
     jvmToolchain(8)
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            groupId = project.group as String
+            artifactId = rootProject.name
+            version = project.version as String
+
+            from(components["java"])
+
+            pom {
+                name.set(rootProject.name)
+                description.set("Simple library to lookup skin textures")
+                url.set("https://github.com/Sumandora/MCSkinLookup")
+
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://raw.githubusercontent.com/Sumandora/MCSkinLookup/master/LICENSE")
+                    }
+                }
+            }
+        }
+    }
+}
