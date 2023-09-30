@@ -6,6 +6,6 @@ class JavaRequester : Requester {
     override fun request(url: String): String {
         val urlConnection = URL(url).openConnection()
         urlConnection.connect()
-        return urlConnection.getInputStream().readAllBytes().decodeToString()
+        return urlConnection.getInputStream().readBytes().decodeToString()
     }
 }
