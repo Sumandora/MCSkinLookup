@@ -16,6 +16,13 @@ class MCSkinLookup(private val requester: Requester) {
 
     constructor() : this(JavaRequester())
 
+    /**
+     * Fast comparison without parsing the entire UUID
+     */
+    private fun compareUUID(uuidA: String, uuidB: String): Boolean {
+        return uuidA.filterNot { it == '-' } == uuidB.filterNot { it == '-' }
+    }
+
     @OptIn(ExperimentalEncodingApi::class)
     fun decodeSkinData(encodedSkinData: String, uuid: Optional<String> = Optional.empty(), name: Optional<String> = Optional.empty()): SkinData {
         val skinData = try {
@@ -24,7 +31,7 @@ class MCSkinLookup(private val requester: Requester) {
             e.printStackTrace()
             error("Can't decode skin data")
         }
-        uuid.ifPresent { assert(skinData.profileId == it) }
+        uuid.ifPresent { compareUUID(skinData.profileId, it) }
         name.ifPresent { assert(skinData.profileName == it) }
 
         return skinData
@@ -36,7 +43,7 @@ class MCSkinLookup(private val requester: Requester) {
         } catch (e: FileNotFoundException) {
             error("UUID does not exist")
         })
-        assert(skinLookup.id == uuid)
+        assert(compareUUID(skinLookup.id, uuid))
         name.ifPresent { assert(skinLookup.name == it) }
         val textures = skinLookup.properties.firstOrNull { it.name == "textures" } ?: error("No skin data available")
         return decodeSkinData(textures.value, Optional.of(uuid), name)
