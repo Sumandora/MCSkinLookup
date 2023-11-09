@@ -24,4 +24,17 @@ internal class TestLookup {
             assertEquals(e.message, "Name does not exist")
         }
     }
+
+    @Test
+    fun testInvalidUUIDs() {
+        val lookup = MCSkinLookup()
+
+        try {
+            lookup.lookupUUID("00000000-0000-0000-0000-000000000000") // Let's hope nobody manages to get this UUID
+            error("This shouldn't work")
+        } catch (e: IllegalStateException) {
+            // This branch is intended
+            assertEquals(e.message, "Json object was empty")
+        }
+    }
 }

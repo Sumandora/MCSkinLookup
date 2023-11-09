@@ -7,6 +7,8 @@ import su.mandora.mcskinlookup.model.impl.Error
 val deserializer = Json { ignoreUnknownKeys = true }
 
 inline fun <reified T : MojangResponse> deserializeMojang(json: String): T {
+    if(json.isEmpty())
+        error("Json object was empty")
     try {
         return deserializer.decodeFromString<T>(json)
     } catch (e: SerializationException) {
